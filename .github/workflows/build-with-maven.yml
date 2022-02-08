@@ -19,7 +19,12 @@ on:
         required: false
         type: string
       publish:
-        description: 'Is artifact should be published?'
+        description: 'Enable publish step?'
+        default: false
+        required: false
+        type: boolean
+      sonar:
+        description: 'Enable sonar step?'
         default: false
         required: false
         type: boolean
@@ -48,3 +53,10 @@ jobs:
         run: mvn --batch-mode deploy -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sonar
+        if: ${{ inputs.sonar }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cakes-management-system_cms-starter  -DskipTests
