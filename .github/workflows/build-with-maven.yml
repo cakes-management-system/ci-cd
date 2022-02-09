@@ -47,14 +47,13 @@ jobs:
           distribution: ${{ inputs.jdk-distribution }}
           cache: maven
 
-      - name: Build ${{ inputs.display-name }}
-        run: mvn --batch-mode clean package
+      - name: Compile ${{ inputs.display-name }}
+        run: mvn --batch-mode compile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish ${{ inputs.display-name }}
-        if: ${{ inputs.publish }}
-        run: mvn --batch-mode deploy -DskipTests
+      - name: Test ${{ inputs.display-name }}
+        run: mvn --batch-mode test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -63,4 +62,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.sonar-token }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cakes-management-system_cms-starter  -DskipTests
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cakes-management-system_cms-starter
+
+      - name: Publish ${{ inputs.display-name }}
+        if: ${{ inputs.publish }}
+        run: mvn --batch-mode deploy -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
