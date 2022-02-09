@@ -28,11 +28,10 @@ on:
         default: false
         required: false
         type: boolean
+    secrets:
       sonar-token:
         description: 'Sonar token'
-        default: ''
         required: false
-        type: string
 
 jobs:
   build-with-maven:
@@ -63,5 +62,5 @@ jobs:
         if: ${{ inputs.sonar }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ inputs.sonar-token }}
+          SONAR_TOKEN: ${{ secrets.sonar-token }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=cakes-management-system_cms-starter  -DskipTests
