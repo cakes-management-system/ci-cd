@@ -53,7 +53,7 @@ jobs:
           cache: maven
 
       - name: Compile ${{ inputs.display-name }}
-        run: mvn --batch-mode compile
+        run: mvn --batch-mode clenan compile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
